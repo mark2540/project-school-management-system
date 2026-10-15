@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amani Secondary School — Management Register</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-950:#0d1a2b;
+    --navy-900:#122238;
+    --navy-800:#1c3454;
+    --navy-700:#2a4b73;
+    --gold-500:#c69a3d;
+    --gold-400:#dab35f;
+    --cream-50:#f6f3ea;
+    --cream-100:#efe9d8;
+    --paper:#fbf9f2;
+    --ink:#1a2230;
+    --slate-500:#6b7280;
+    --slate-400:#9aa2af;
+    --line:#d9d2bd;
+    --green-600:#2f7d5d;
+    --green-100:#e2f0e8;
+    --red-600:#b23a48;
+    --red-100:#f6e2e4;
+    --amber-600:#a5710f;
+    --amber-100:#f4e7cd;
+    --radius:2px;
+    --shadow:0 1px 2px rgba(13,26,43,0.06), 0 8px 24px -12px rgba(13,26,43,0.18);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Public Sans', sans-serif;
+    background:var(--cream-50);
+    color:var(--ink);
+    min-height:100vh;
+    display:flex;
+  }
+  ::selection{background:var(--gold-400); color:var(--navy-950);}
+
+  /* ===== Sidebar ===== */
+  .sidebar{
+    width:248px;
+    flex-shrink:0;
+    background:var(--navy-950);
+    color:var(--cream-50);
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    position:sticky;
+    top:0;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:24px 20px 20px;
+    border-bottom:1px solid rgba(198,154,61,0.25);
+  }
+  .seal{
+    width:42px; height:42px;
+    border-radius:50%;
+    border:1.5px solid var(--gold-500);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:15px;
+    color:var(--gold-400);
+    flex-shrink:0;
+    position:relative;
+  }
+  .seal::after{
+    content:'';
+    position:absolute;
+    inset:4px;
+    border:1px solid rgba(198,154,61,0.4);
+    border-radius:50%;
+  }
+  .brand-text .name{
+    font-family:'Fraunces', serif;
+    font-size:16px;
+    font-weight:600;
+    line-height:1.25;
+  }
+  .brand-text .tag{
+    font-size:10.5px;
+    letter-spacing:0.09em;
+    text-transform:uppercase;
+    color:var(--gold-400);
+    margin-top:2px;
+  }
+  nav{padding:18px 12px; flex:1;}
+  .nav-label{
+    font-size:10px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--slate-400);
+    padding:10px 12px 6px;
+  }
+  .nav-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    width:100%;
+    text-align:left;
+    background:none;
+    border:none;
+    color:var(--cream-100);
+    font-family:inherit;
+    font-size:13.5px;
+    padding:10px 12px;
+    border-radius:var(--radius);
+    cursor:pointer;
+    position:relative;
+    transition:background 0.15s ease, color 0.15s ease;
+  }
+  .nav-item .num{
+    font-family:'Space Mono', monospace;
+    font-size:10.5px;
+    color:var(--slate-400);
+    width:16px;
+  }
+  .nav-item:hover{background:rgba(255,255,255,0.05);}
+  .nav-item.active{
+    background:rgba(198,154,61,0.14);
+    color:var(--gold-400);
+  }
+  .nav-item.active .num{color:var(--gold-500);}
+  .nav-item.active::before{
+    content:'';
+    position:absolute; left:0; top:6px; bottom:6px;
+    width:2px; background:var(--gold-500);
+  }
+  .sidebar-foot{
+    padding:16px 20px 20px;
+    border-top:1px solid rgba(198,154,61,0.2);
+    font-size:11px;
+    color:var(--slate-400);
+    line-height:1.5;
+  }
+
+  /* ===== Main ===== */
+  .main{flex:1; min-width:0; display:flex; flex-direction:column;}
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:20px 32px;
+    border-bottom:1px solid var(--line);
+    background:var(--paper);
+  }
+  .topbar h1{
+    font-family:'Fraunces', serif;
+    font-size:22px;
+    font-weight:600;
+  }
+  .topbar .sub{font-size:12.5px; color:var(--slate-500); margin-top:2px;}
+  .topbar-right{display:flex; align-items:center; gap:14px;}
+  .term-chip{
+    font-family:'Space Mono', monospace;
+    font-size:11px;
+    color:var(--navy-800);
+    background:var(--cream-100);
+    border:1px solid var(--line);
+    padding:6px 10px;
+    border-radius:var(--radius);
+  }
+  .content{padding:28px 32px 60px; flex:1;}
+  .view{display:none;}
+  .view.active{display:block; animation:fade 0.25s ease;}
+  @keyframes fade{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
+
+  /* ===== Cards / stat strip ===== */
+  .stat-row{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+    margin-bottom:28px;
+  }
+  .stat-card{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-top:2px solid var(--gold-500);
+    padding:18px 18px 16px;
+  }
+  .stat-card .label{
+    font-size:10.5px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--slate-500);
+  }
+  .stat-card .value{
+    font-family:'Fraunces', serif;
+    font-size:30px;
+    font-weight:600;
+    color:var(--navy-900);
+    margin-top:6px;
+  }
+  .stat-card .delta{font-size:11.5px; color:var(--green-600); margin-top:4px;}
+  .stat-card .delta.warn{color:var(--amber-600);}
+
+  .panel{
+    background:var(--paper);
+    border:1px solid var(--line);
+    margin-bottom:24px;
+  }
+  .panel-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 20px;
+    border-bottom:1px solid var(--line);
+  }
+  .panel-head h2{font-family:'Fraunces', serif; font-size:16px; font-weight:600;}
+  .panel-body{padding:20px;}
+
+  /* ===== Buttons ===== */
+  .btn{
+    font-family:'Public Sans', sans-serif;
+    font-size:12.5px;
+    font-weight:600;
+    padding:9px 16px;
+    border-radius:var(--radius);
+    border:1px solid transparent;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    transition:transform 0.08s ease, background 0.15s ease;
+  }
+  .btn:active{transform:scale(0.97);}
+  .btn-primary{background:var(--navy-900); color:var(--cream-50);}
+  .btn-primary:hover{background:var(--navy-800);}
+  .btn-gold{background:var(--gold-500); color:var(--navy-950);}
+  .btn-gold:hover{background:var(--gold-400);}
+  .btn-ghost{background:transparent; border-color:var(--line); color:var(--navy-900);}
+  .btn-ghost:hover{background:var(--cream-100);}
+  .btn-danger{background:transparent; color:var(--red-600); border-color:var(--red-100);}
+  .btn-danger:hover{background:var(--red-100);}
+  .btn-sm{padding:5px 10px; font-size:11.5px;}
+
+  /* ===== Table (ledger style) ===== */
+  table{width:100%; border-collapse:collapse;}
+  thead th{
+    text-align:left;
+    font-size:10.5px;
+    letter-spacing:0.07em;
+    text-transform:uppercase;
+    color:var(--slate-500);
+    padding:0 20px 10px;
+    border-bottom:1px solid var(--line);
+  }
+  tbody td{
+    padding:12px 20px;
+    border-bottom:1px solid var(--cream-100);
+    font-size:13px;
+    vertical-align:middle;
+  }
+  tbody tr:hover{background:var(--cream-50);}
+  tbody tr:last-child td{border-bottom:none;}
+  .mono{font-family:'Space Mono', monospace; font-size:11.5px; color:var(--slate-500);}
+  .pill{
+    display:inline-block;
+    padding:3px 9px;
+    border-radius:20px;
+    font-size:10.5px;
+    font-weight:700;
+    letter-spacing:0.03em;
+  }
+  .pill-green{background:var(--green-100); color:var(--green-600);}
+  .pill-red{background:var(--red-100); color:var(--red-600);}
+  .pill-amber{background:var(--amber-100); color:var(--amber-600);}
+  .row-actions{display:flex; gap:6px; justify-content:flex-end;}
+  .empty{
+    text-align:center;
+    padding:48px 20px;
+    color:var(--slate-500);
+    font-size:13px;
+  }
+  .empty .big{font-family:'Fraunces', serif; font-size:15px; color:var(--navy-900); margin-bottom:6px;}
+
+  /* ===== Toolbar ===== */
+  .toolbar{display:flex; gap:10px; align-items:center; margin-bottom:16px; flex-wrap:wrap;}
+  .search-box{
+    flex:1; min-width:180px;
+    display:flex; align-items:center; gap:8px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    padding:8px 12px;
+  }
+  .search-box input{
+    border:none; outline:none; background:none;
+    font-family:inherit; font-size:13px; width:100%;
+    color:var(--ink);
+  }
+  select, .input{
+    font-family:inherit;
+    font-size:13px;
+    padding:8px 10px;
+    border:1px solid var(--line);
+    background:var(--paper);
+    color:var(--ink);
+  }
+
+  /* ===== Modal ===== */
+  .overlay{
+    position:fixed; inset:0;
+    background:rgba(13,26,43,0.5);
+    display:none;
+    align-items:center; justify-content:center;
+    z-index:50;
+    padding:20px;
+  }
+  .overlay.active{display:flex;}
+  .modal{
+    background:var(--paper);
+    width:100%; max-width:460px;
+    border-top:3px solid var(--gold-500);
+    box-shadow:var(--shadow);
+    max-height:90vh;
+    overflow-y:auto;
+  }
+  .modal-head{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:18px 22px;
+    border-bottom:1px solid var(--line);
+  }
+  .modal-head h3{font-family:'Fraunces', serif; font-size:17px; font-weight:600;}
+  .modal-close{background:none; border:none; font-size:20px; cursor:pointer; color:var(--slate-500); line-height:1;}
+  .modal-body{padding:20px 22px;}
+  .field{margin-bottom:14px;}
+  .field label{
+    display:block;
+    font-size:11.5px;
+    font-weight:600;
+    color:var(--slate-500);
+    margin-bottom:5px;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+  }
+  .field input, .field select{width:100%;}
+  .modal-foot{
+    padding:16px 22px;
+    border-top:1px solid var(--line);
+    display:flex; justify-content:flex-end; gap:10px;
+  }
+  .field-row{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+
+  .toast{
+    position:fixed; bottom:24px; right:24px;
+    background:var(--navy-950); color:var(--cream-50);
+    padding:12px 18px;
+    font-size:13px;
+    border-left:3px solid var(--gold-500);
+    box-shadow:var(--shadow);
+    transform:translateY(12px);
+    opacity:0;
+    pointer-events:none;
+    transition:all 0.25s ease;
+    z-index:60;
+  }
+  .toast.show{transform:translateY(0); opacity:1;}
+
+  @media(max-width:880px){
+    .sidebar{position:fixed; left:-248px; z-index:40; transition:left 0.2s ease;}
+    .sidebar.open{left:0;}
+    .stat-row{grid-template-columns:1fr 1fr;}
+    .menu-btn{display:inline-flex !important;}
+  }
+  .menu-btn{display:none; background:none; border:1px solid var(--line); padding:7px 10px; cursor:pointer;}
+</style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <div class="seal">AS</div>
+    <div class="brand-text">
+      <div class="name">Amani Secondary</div>
+      <div class="tag">Management Register</div>
+    </div>
+  </div>
+  <nav>
+    <div class="nav-label">Overview</div>
+    <button class="nav-item active" data-view="dashboard"><span class="num">01</span> Dashboard</button>
+    <div class="nav-label">Records</div>
+    <button class="nav-item" data-view="students"><span class="num">02</span> Students</button>
+    <button class="nav-item" data-view="teachers"><span class="num">03</span> Teachers</button>
+    <button class="nav-item" data-view="attendance"><span class="num">04</span> Attendance</button>
+    <button class="nav-item" data-view="fees"><span class="num">05</span> Fee Ledger</button>
+  </nav>
+  <div class="sidebar-foot">
+    Term 2 · 2026<br>
+    Data held in-session only.
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <button class="menu-btn" id="menuBtn">☰</button>
+      <div>
+        <h1 id="viewTitle">Dashboard</h1>
+        <div class="sub" id="viewSub">A snapshot of the school register</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span class="term-chip" id="clock">—</span>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <section class="view active" id="view-dashboard">
+      <div class="stat-row" id="statRow"></div>
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Recent Admissions</h2>
+          <button class="btn btn-ghost btn-sm" data-goto="students">View all</button>
+        </div>
+        <div class="panel-body" style="padding:0;">
+          <table>
+            <thead><tr><th>Adm No.</th><th>Name</th><th>Form</th><th>Status</th></tr></thead>
+            <tbody id="recentStudentsBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- STUDENTS -->
+    <section class="view" id="view-students">
+      <div class="toolbar">
+        <div class="search-box">🔎 <input type="text" id="studentSearch" placeholder="Search by name or admission number…"></div>
+        <select id="studentFormFilter">
+          <option value="">All Forms</option>
+          <option value="Form 1">Form 1</option>
+          <option value="Form 2">Form 2</option>
+          <option value="Form 3">Form 3</option>
+          <option value="Form 4">Form 4</option>
+        </select>
+        <button class="btn btn-gold" id="addStudentBtn">+ Admit Student</button>
+      </div>
+      <div class="panel">
+        <table>
+          <thead><tr><th>Adm No.</th><th>Name</th><th>Form</th><th>Guardian</th><th>Phone</th><th>Status</th><th></th></tr></thead>
+          <tbody id="studentsBody"></tbody>
+        </table>
+        <div class="empty" id="studentsEmpty" style="display:none;">
+          <div class="big">No students match your search</div>
+          Try a different name, admission number, or clear the form filter.
+        </div>
+      </div>
+    </section>
+
+    <!-- TEACHERS -->
+    <section class="view" id="view-teachers">
+      <div class="toolbar">
+        <div class="search-box">🔎 <input type="text" id="teacherSearch" placeholder="Search by name or subject…"></div>
+        <button class="btn btn-gold" id="addTeacherBtn">+ Add Teacher</button>
+      </div>
+      <div class="panel">
+        <table>
+          <thead><tr><th>Staff No.</th><th>Name</th><th>Subject</th><th>Class Teacher Of</th><th>Phone</th><th></th></tr></thead>
+          <tbody id="teachersBody"></tbody>
+        </table>
+        <div class="empty" id="teachersEmpty" style="display:none;">
+          <div class="big">No teachers on record yet</div>
+          Add a teacher to build up the staff register.
+        </div>
+      </div>
+    </section>
+
+    <!-- ATTENDANCE -->
+    <section class="view" id="view-attendance">
+      <div class="toolbar">
+        <select id="attendanceFormFilter">
+          <option value="">All Forms</option>
+          <option value="Form 1">Form 1</option>
+          <option value="Form 2">Form 2</option>
+          <option value="Form 3">Form 3</option>
+          <option value="Form 4">Form 4</option>
+        </select>
+        <input type="date" class="input" id="attendanceDate">
+        <button class="btn btn-ghost" id="markAllPresent">Mark all present</button>
+        <button class="btn btn-primary" id="saveAttendance">Save register</button>
+      </div>
+      <div class="panel">
+        <table>
+          <thead><tr><th>Adm No.</th><th>Name</th><th>Form</th><th>Status</th></tr></thead>
+          <tbody id="attendanceBody"></tbody>
+        </table>
+        <div class="empty" id="attendanceEmpty" style="display:none;">
+          <div class="big">No students to mark</div>
+          Admit students first, or adjust the form filter.
+        </div>
+      </div>
+    </section>
+
+    <!-- FEES -->
+    <section class="view" id="view-fees">
+      <div class="stat-row" id="feeStatRow" style="grid-template-columns:repeat(3,1fr); margin-bottom:20px;"></div>
+      <div class="toolbar">
+        <div class="search-box">🔎 <input type="text" id="feeSearch" placeholder="Search by name or admission number…"></div>
+      </div>
+      <div class="panel">
+        <table>
+          <thead><tr><th>Adm No.</th><th>Name</th><th>Form</th><th>Billed (KSh)</th><th>Paid (KSh)</th><th>Balance</th><th>Status</th><th></th></tr></thead>
+          <tbody id="feesBody"></tbody>
+        </table>
+        <div class="empty" id="feesEmpty" style="display:none;">
+          <div class="big">No fee records</div>
+          Admit students to begin the fee ledger.
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- Student Modal -->
+<div class="overlay" id="studentModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="studentModalTitle">Admit Student</h3>
+      <button class="modal-close" data-close="studentModal">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="studentEditId">
+      <div class="field"><label>Full Name</label><input class="input" id="studentName" placeholder="e.g. Wanjiru Kamau"></div>
+      <div class="field-row">
+        <div class="field"><label>Admission No.</label><input class="input" id="studentAdm" placeholder="e.g. ASS/0142"></div>
+        <div class="field"><label>Form</label>
+          <select id="studentForm">
+            <option>Form 1</option><option>Form 2</option><option>Form 3</option><option>Form 4</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>Guardian Name</label><input class="input" id="studentGuardian" placeholder="e.g. Peter Kamau"></div>
+      <div class="field"><label>Guardian Phone</label><input class="input" id="studentPhone" placeholder="e.g. 0712 345 678"></div>
+      <div class="field"><label>Termly Fee Billed (KSh)</label><input class="input" type="number" id="studentFee" placeholder="e.g. 18000"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" data-close="studentModal">Cancel</button>
+      <button class="btn btn-primary" id="saveStudentBtn">Save Student</button>
+    </div>
+  </div>
+</div>
+
+<!-- Teacher Modal -->
+<div class="overlay" id="teacherModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Add Teacher</h3>
+      <button class="modal-close" data-close="teacherModal">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="teacherEditId">
+      <div class="field"><label>Full Name</label><input class="input" id="teacherName" placeholder="e.g. Mr. Otieno Odhiambo"></div>
+      <div class="field-row">
+        <div class="field"><label>Staff No.</label><input class="input" id="teacherStaffNo" placeholder="e.g. TSC/2291"></div>
+        <div class="field"><label>Subject</label><input class="input" id="teacherSubject" placeholder="e.g. Mathematics"></div>
+      </div>
+      <div class="field"><label>Class Teacher Of (optional)</label>
+        <select id="teacherClass">
+          <option value="">— None —</option>
+          <option>Form 1</option><option>Form 2</option><option>Form 3</option><option>Form 4</option>
+        </select>
+      </div>
+      <div class="field"><label>Phone</label><input class="input" id="teacherPhone" placeholder="e.g. 0722 111 222"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" data-close="teacherModal">Cancel</button>
+      <button class="btn btn-primary" id="saveTeacherBtn">Save Teacher</button>
+    </div>
+  </div>
+</div>
+
+<!-- Payment Modal -->
+<div class="overlay" id="paymentModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Record Payment</h3>
+      <button class="modal-close" data-close="paymentModal">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="paymentStudentId">
+      <div class="field"><label>Student</label><div class="input" id="paymentStudentName" style="background:var(--cream-100);"></div></div>
+      <div class="field"><label>Amount Received (KSh)</label><input class="input" type="number" id="paymentAmount" placeholder="e.g. 5000"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" data-close="paymentModal">Cancel</button>
+      <button class="btn btn-primary" id="savePaymentBtn">Record Payment</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ---------- In-memory data store (no browser storage used) ---------- */
+  let students = [
+    {id:1, adm:'ASS/0101', name:'Wanjiru Kamau', form:'Form 3', guardian:'Peter Kamau', phone:'0712 345 678', status:'Active', billed:18000, paid:18000},
+    {id:2, adm:'ASS/0102', name:'Otieno Barasa', form:'Form 2', guardian:'Grace Barasa', phone:'0722 456 789', status:'Active', billed:16000, paid:9000},
+    {id:3, adm:'ASS/0103', name:'Aisha Noor', form:'Form 4', guardian:'Hassan Noor', phone:'0733 567 890', status:'Active', billed:19500, paid:19500},
+    {id:4, adm:'ASS/0104', name:'Brian Mutiso', form:'Form 1', guardian:'Susan Mutiso', phone:'0700 678 901', status:'Active', billed:15000, paid:4000},
+    {id:5, adm:'ASS/0105', name:'Faith Chebet', form:'Form 3', guardian:'James Chebet', phone:'0711 789 012', status:'Active', billed:18000, paid:12000}
+  ];
+  let teachers = [
+    {id:1, staffNo:'TSC/2201', name:'Mr. Otieno Odhiambo', subject:'Mathematics', classTeacherOf:'Form 3', phone:'0722 111 222'},
+    {id:2, staffNo:'TSC/2202', name:'Mrs. Njeri Kariuki', subject:'English', classTeacherOf:'Form 2', phone:'0733 222 333'},
+    {id:3, staffNo:'TSC/2203', name:'Mr. Hassan Ali', subject:'Chemistry', classTeacherOf:'', phone:'0700 333 444'}
+  ];
+  let attendanceRecords = {}; // key: date|studentId -> 'Present'|'Absent'|'Late'
+  let nextStudentId = 6;
+  let nextTeacherId = 4;
+
+  const $ = (sel, ctx) => (ctx||document).querySelector(sel);
+  const $$ = (sel, ctx) => Array.from((ctx||document).querySelectorAll(sel));
+
+  /* ---------- Toast ---------- */
+  let toastTimer;
+  function toast(msg){
+    const el = $('#toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=> el.classList.remove('show'), 2400);
+  }
+
+  /* ---------- Navigation ---------- */
+  const titles = {
+    dashboard:['Dashboard','A snapshot of the school register'],
+    students:['Students','Manage admissions and student records'],
+    teachers:['Teachers','Manage the teaching staff register'],
+    attendance:['Attendance','Mark and save the daily register'],
+    fees:['Fee Ledger','Track billed, paid, and outstanding balances']
+  };
+  function goto(view){
+    $$('.nav-item').forEach(b=> b.classList.toggle('active', b.dataset.view===view));
+    $$('.view').forEach(v=> v.classList.remove('active'));
+    $('#view-'+view).classList.add('active');
+    $('#viewTitle').textContent = titles[view][0];
+    $('#viewSub').textContent = titles[view][1];
+    $('#sidebar').classList.remove('open');
+    renderAll();
+  }
+  $$('.nav-item').forEach(btn=> btn.addEventListener('click', ()=> goto(btn.dataset.view)));
+  $$('[data-goto]').forEach(btn=> btn.addEventListener('click', ()=> goto(btn.dataset.goto)));
+  $('#menuBtn').addEventListener('click', ()=> $('#sidebar').classList.toggle('open'));
+
+  /* ---------- Clock ---------- */
+  function tickClock(){
+    const now = new Date();
+    $('#clock').textContent = now.toLocaleDateString('en-GB', {weekday:'short', day:'2-digit', month:'short', year:'numeric'}) + ' · ' + now.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'});
+  }
+  tickClock();
+  setInterval(tickClock, 30000);
+  $('#attendanceDate').valueAsDate = new Date();
+
+  /* ---------- Modal helpers ---------- */
+  function openModal(id){ $('#'+id).classList.add('active'); }
+  function closeModal(id){ $('#'+id).classList.remove('active'); }
+  $$('[data-close]').forEach(btn=> btn.addEventListener('click', ()=> closeModal(btn.dataset.close)));
+  $$('.overlay').forEach(ov=> ov.addEventListener('click', e=>{ if(e.target===ov) ov.classList.remove('active'); }));
+
+  /* ================= DASHBOARD ================= */
+  function renderDashboard(){
+    const total = students.length;
+    const active = students.filter(s=>s.status==='Active').length;
+    const totalBilled = students.reduce((a,s)=>a+s.billed,0);
+    const totalPaid = students.reduce((a,s)=>a+s.paid,0);
+    const arrears = totalBilled - totalPaid;
+    const staff = teachers.length;
+
+    $('#statRow').innerHTML = `
+      <div class="stat-card"><div class="label">Total Students</div><div class="value">${total}</div><div class="delta">${active} active on the register</div></div>
+      <div class="stat-card"><div class="label">Teaching Staff</div><div class="value">${staff}</div><div class="delta">Across ${new Set(teachers.map(t=>t.subject)).size} subjects</div></div>
+      <div class="stat-card"><div class="label">Fees Collected</div><div class="value">${formatKsh(totalPaid)}</div><div class="delta">of ${formatKsh(totalBilled)} billed this term</div></div>
+      <div class="stat-card"><div class="label">Outstanding Balance</div><div class="value">${formatKsh(arrears)}</div><div class="delta ${arrears>0?'warn':''}">${arrears>0? 'Across '+students.filter(s=>s.paid<s.billed).length+' students' : 'All accounts settled'}</div></div>
+    `;
+
+    const recent = [...students].slice(-5).reverse();
+    $('#recentStudentsBody').innerHTML = recent.map(s=>`
+      <tr><td class="mono">${s.adm}</td><td>${s.name}</td><td>${s.form}</td><td>${statusPill(s.status)}</td></tr>
+    `).join('') || `<tr><td colspan="4" class="empty">No students admitted yet</td></tr>`;
+  }
+
+  function statusPill(status){
+    if(status==='Active') return `<span class="pill pill-green">Active</span>`;
+    if(status==='Suspended') return `<span class="pill pill-amber">Suspended</span>`;
+    return `<span class="pill pill-red">${status}</span>`;
+  }
+  function formatKsh(n){ return 'KSh ' + Number(n).toLocaleString('en-KE'); }
+
+  /* ================= STUDENTS ================= */
+  function renderStudents(){
+    const q = ($('#studentSearch').value||'').trim().toLowerCase();
+    const formFilter = $('#studentFormFilter').value;
+    let list = students.filter(s=>
+      (!q || s.name.toLowerCase().includes(q) || s.adm.toLowerCase().includes(q)) &&
+      (!formFilter || s.form===formFilter)
+    );
+    $('#studentsBody').innerHTML = list.map(s=>`
+      <tr>
+        <td class="mono">${s.adm}</td>
+        <td>${s.name}</td>
+        <td>${s.form}</td>
+        <td>${s.guardian}</td>
+        <td class="mono">${s.phone}</td>
+        <td>${statusPill(s.status)}</td>
+        <td><div class="row-actions">
+          <button class="btn btn-ghost btn-sm" onclick="SMS.editStudent(${s.id})">Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="SMS.deleteStudent(${s.id})">Remove</button>
+        </div></td>
+      </tr>
+    `).join('');
+    $('#studentsEmpty').style.display = list.length? 'none':'block';
+  }
+  $('#studentSearch').addEventListener('input', renderStudents);
+  $('#studentFormFilter').addEventListener('change', renderStudents);
+
+  $('#addStudentBtn').addEventListener('click', ()=>{
+    $('#studentModalTitle').textContent = 'Admit Student';
+    $('#studentEditId').value = '';
+    $('#studentName').value=''; $('#studentAdm').value=''; $('#studentForm').value='Form 1';
+    $('#studentGuardian').value=''; $('#studentPhone').value=''; $('#studentFee').value='';
+    openModal('studentModal');
+  });
+
+  function editStudent(id){
+    const s = students.find(x=>x.id===id);
+    if(!s) return;
+    $('#studentModalTitle').textContent = 'Edit Student';
+    $('#studentEditId').value = s.id;
+    $('#studentName').value = s.name;
+    $('#studentAdm').value = s.adm;
+    $('#studentForm').value = s.form;
+    $('#studentGuardian').value = s.guardian;
+    $('#studentPhone').value = s.phone;
+    $('#studentFee').value = s.billed;
+    openModal('studentModal');
+  }
+
+  function deleteStudent(id){
+    const s = students.find(x=>x.id===id);
+    if(!s) return;
+    if(!confirm(`Remove ${s.name} (${s.adm}) from the register? This cannot be undone.`)) return;
+    students = students.filter(x=>x.id!==id);
+    toast('Student removed from the register.');
+    renderAll();
+  }
+
+  $('#saveStudentBtn').addEventListener('click', ()=>{
+    const name = $('#studentName').value.trim();
+    const adm = $('#studentAdm').value.trim();
+    const form = $('#studentForm').value;
+    const guardian = $('#studentGuardian').value.trim();
+    const phone = $('#studentPhone').value.trim();
+    const fee = Number($('#studentFee').value) || 0;
+    const editId = $('#studentEditId').value;
+
+    if(!name || !adm){ toast('Name and admission number are required.'); return; }
+
+    const dupe = students.find(s => s.adm.toLowerCase()===adm.toLowerCase() && String(s.id)!==editId);
+    if(dupe){ toast('That admission number is already in use.'); return; }
+
+    if(editId){
+      const s = students.find(x=>x.id===Number(editId));
+      Object.assign(s, {name, adm, form, guardian, phone, billed:fee});
+      toast('Student record updated.');
+    } else {
+      students.push({id:nextStudentId++, adm, name, form, guardian, phone, status:'Active', billed:fee, paid:0});
+      toast('Student admitted successfully.');
+    }
+    closeModal('studentModal');
+    renderAll();
+  });
+
+  /* ================= TEACHERS ================= */
+  function renderTeachers(){
+    const q = ($('#teacherSearch').value||'').trim().toLowerCase();
+    let list = teachers.filter(t => !q || t.name.toLowerCase().includes(q) || t.subject.toLowerCase().includes(q));
+    $('#teachersBody').innerHTML = list.map(t=>`
+      <tr>
+        <td class="mono">${t.staffNo}</td>
+        <td>${t.name}</td>
+        <td>${t.subject}</td>
+        <td>${t.classTeacherOf || '—'}</td>
+        <td class="mono">${t.phone}</td>
+        <td><div class="row-actions">
+          <button class="btn btn-ghost btn-sm" onclick="SMS.editTeacher(${t.id})">Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="SMS.deleteTeacher(${t.id})">Remove</button>
+        </div></td>
+      </tr>
+    `).join('');
+    $('#teachersEmpty').style.display = list.length? 'none':'block';
+  }
+  $('#teacherSearch').addEventListener('input', renderTeachers);
+
+  $('#addTeacherBtn').addEventListener('click', ()=>{
+    $('#teacherEditId').value='';
+    $('#teacherName').value=''; $('#teacherStaffNo').value=''; $('#teacherSubject').value='';
+    $('#teacherClass').value=''; $('#teacherPhone').value='';
+    openModal('teacherModal');
+  });
+
+  function editTeacher(id){
+    const t = teachers.find(x=>x.id===id);
+    if(!t) return;
+    $('#teacherEditId').value = t.id;
+    $('#teacherName').value = t.name;
+    $('#teacherStaffNo').value = t.staffNo;
+    $('#teacherSubject').value = t.subject;
+    $('#teacherClass').value = t.classTeacherOf;
+    $('#teacherPhone').value = t.phone;
+    openModal('teacherModal');
+  }
+
+  function deleteTeacher(id){
+    const t = teachers.find(x=>x.id===id);
+    if(!t) return;
+    if(!confirm(`Remove ${t.name} from the staff register?`)) return;
+    teachers = teachers.filter(x=>x.id!==id);
+    toast('Teacher removed from the register.');
+    renderAll();
+  }
+
+  $('#saveTeacherBtn').addEventListener('click', ()=>{
+    const name = $('#teacherName').value.trim();
+    const staffNo = $('#teacherStaffNo').value.trim();
+    const subject = $('#teacherSubject').value.trim();
+    const classTeacherOf = $('#teacherClass').value;
+    const phone = $('#teacherPhone').value.trim();
+    const editId = $('#teacherEditId').value;
+
+    if(!name || !staffNo || !subject){ toast('Name, staff number and subject are required.'); return; }
+
+    if(editId){
+      const t = teachers.find(x=>x.id===Number(editId));
+      Object.assign(t, {name, staffNo, subject, classTeacherOf, phone});
+      toast('Teacher record updated.');
+    } else {
+      teachers.push({id:nextTeacherId++, staffNo, name, subject, classTeacherOf, phone});
+      toast('Teacher added to the staff register.');
+    }
+    closeModal('teacherModal');
+    renderAll();
+  });
+
+  /* ================= ATTENDANCE ================= */
+  function renderAttendance(){
+    const form = $('#attendanceFormFilter').value;
+    const date = $('#attendanceDate').value;
+    let list = students.filter(s => !form || s.form===form);
+
+    $('#attendanceBody').innerHTML = list.map(s=>{
+      const key = date+'|'+s.id;
+      const current = attendanceRecords[key] || 'Present';
+      return `
+        <tr>
+          <td class="mono">${s.adm}</td>
+          <td>${s.name}</td>
+          <td>${s.form}</td>
+          <td>
+            <select class="input" data-student="${s.id}" onchange="SMS.setAttendance(${s.id}, this.value)">
+              <option value="Present" ${current==='Present'?'selected':''}>Present</option>
+              <option value="Absent" ${current==='Absent'?'selected':''}>Absent</option>
+              <option value="Late" ${current==='Late'?'selected':''}>Late</option>
+            </select>
+          </td>
+        </tr>`;
+    }).join('');
+    $('#attendanceEmpty').style.display = list.length? 'none':'block';
+  }
+  $('#attendanceFormFilter').addEventListener('change', renderAttendance);
+  $('#attendanceDate').addEventListener('change', renderAttendance);
+
+  function setAttendance(studentId, value){
+    const date = $('#attendanceDate').value;
+    attendanceRecords[date+'|'+studentId] = value;
+  }
+
+  $('#markAllPresent').addEventListener('click', ()=>{
+    const date = $('#attendanceDate').value;
+    const form = $('#attendanceFormFilter').value;
+    students.filter(s=> !form || s.form===form).forEach(s=>{
+      attendanceRecords[date+'|'+s.id] = 'Present';
+    });
+    renderAttendance();
+    toast('All students marked present for this view.');
+  });
+
+  $('#saveAttendance').addEventListener('click', ()=>{
+    const date = $('#attendanceDate').value;
+    if(!date){ toast('Choose a date before saving.'); return; }
+    const form = $('#attendanceFormFilter').value;
+    const list = students.filter(s=> !form || s.form===form);
+    list.forEach(s=>{
+      const key = date+'|'+s.id;
+      if(!attendanceRecords[key]) attendanceRecords[key] = 'Present';
+    });
+    toast(`Register saved for ${date} (${list.length} student${list.length===1?'':'s'}).`);
+  });
+
+  /* ================= FEES ================= */
+  function renderFees(){
+    const q = ($('#feeSearch').value||'').trim().toLowerCase();
+    let list = students.filter(s => !q || s.name.toLowerCase().includes(q) || s.adm.toLowerCase().includes(q));
+
+    const totalBilled = students.reduce((a,s)=>a+s.billed,0);
+    const totalPaid = students.reduce((a,s)=>a+s.paid,0);
+    const totalBalance = totalBilled - totalPaid;
+    $('#feeStatRow').innerHTML = `
+      <div class="stat-card"><div class="label">Total Billed</div><div class="value">${formatKsh(totalBilled)}</div></div>
+      <div class="stat-card"><div class="label">Total Collected</div><div class="value">${formatKsh(totalPaid)}</div></div>
+      <div class="stat-card"><div class="label">Total Outstanding</div><div class="value">${formatKsh(totalBalance)}</div></div>
+    `;
+
+    $('#feesBody').innerHTML = list.map(s=>{
+      const balance = s.billed - s.paid;
+      const status = balance<=0 ? 'pill-green' : (s.paid===0 ? 'pill-red' : 'pill-amber');
+      const label = balance<=0 ? 'Cleared' : (s.paid===0 ? 'Unpaid' : 'Partial');
+      return `
+        <tr>
+          <td class="mono">${s.adm}</td>
+          <td>${s.name}</td>
+          <td>${s.form}</td>
+          <td class="mono">${s.billed.toLocaleString('en-KE')}</td>
+          <td class="mono">${s.paid.toLocaleString('en-KE')}</td>
+          <td class="mono">${balance.toLocaleString('en-KE')}</td>
+          <td><span class="pill ${status}">${label}</span></td>
+          <td><button class="btn btn-ghost btn-sm" onclick="SMS.openPayment(${s.id})" ${balance<=0?'disabled':''}>Record payment</button></td>
+        </tr>`;
+    }).join('');
+    $('#feesEmpty').style.display = list.length? 'none':'block';
+  }
+  $('#feeSearch').addEventListener('input', renderFees);
+
+  function openPayment(id){
+    const s = students.find(x=>x.id===id);
+    if(!s) return;
+    $('#paymentStudentId').value = s.id;
+    $('#paymentStudentName').textContent = `${s.name} (${s.adm}) — Balance: ${formatKsh(s.billed - s.paid)}`;
+    $('#paymentAmount').value = '';
+    openModal('paymentModal');
+  }
+
+  $('#savePaymentBtn').addEventListener('click', ()=>{
+    const id = Number($('#paymentStudentId').value);
+    const amount = Number($('#paymentAmount').value);
+    const s = students.find(x=>x.id===id);
+    if(!s) return;
+    if(!amount || amount<=0){ toast('Enter a valid payment amount.'); return; }
+    const balance = s.billed - s.paid;
+    if(amount > balance){ toast(`Amount exceeds the outstanding balance of ${formatKsh(balance)}.`); return; }
+    s.paid += amount;
+    closeModal('paymentModal');
+    toast(`Payment of ${formatKsh(amount)} recorded for ${s.name}.`);
+    renderAll();
+  });
+
+  /* ---------- Render dispatcher ---------- */
+  function renderAll(){
+    renderDashboard();
+    renderStudents();
+    renderTeachers();
+    renderAttendance();
+    renderFees();
+  }
+
+  window.SMS = { editStudent, deleteStudent, editTeacher, deleteTeacher, setAttendance, openPayment };
+
+  renderAll();
+})();
+</script>
+</body>
+</html>
